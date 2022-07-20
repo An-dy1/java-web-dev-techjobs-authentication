@@ -9,11 +9,14 @@
 <div class="container body-content">
 	<form method="post">
 		<div class="form-group"></div>
+		
 		<label for="username">Username</label>
 		<input id="username" type="text" th:field="${loginDTO.username}"/>
+		<p th:errors="${loginDTO.username}"></p>
 		
 		<label for="password">Password</label>
 		<input id="password" type="password" th:field="${loginDTO.password}"/>
+		<p th:errors="${loginDTO.password}"></p>
 		
 		<input type="submit" value="Submit"/>
 	</form>
