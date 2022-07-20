@@ -20,10 +20,14 @@ public class AuthenticationFilter implements HandlerInterceptor {
 	@Autowired
 	AuthenticationController authController;
 
-	private static final List<String> whiteList = Arrays.asList("/login", "/register", "/logout", "/css");
+	private static final List<String> whiteList = Arrays.asList("/login", "/register", "/logout", "/techjobs.css", "/bootstrap.js", "/bootstrap.css");
 
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws IOException {
+
+		if(isWhitelisted(request)) {
+			return true;
+		}
 
 		HttpSession session = request.getSession();
 
@@ -36,7 +40,7 @@ public class AuthenticationFilter implements HandlerInterceptor {
 
 	}
 
-	private boolean isWhitelisted(HttpServletRequest request) {
+	private static boolean isWhitelisted(HttpServletRequest request) {
 		if(whiteList.contains(request.getRequestURI())){
 			return true;
 		}
