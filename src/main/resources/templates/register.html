@@ -11,16 +11,16 @@
 		<div class="form-group"></div>
 		
 		<label for="username">Username</label>
-		<input id="username" type="text" th:field="${registerDTO.username}"/>
-		<p th:errors="${registerDTO.username}"></p>
+		<input class="form-control" id="username" type="text" th:field="${registerFormDTO.username}"/>
+		<p th:errors="${registerFormDTO.username}"></p>
 		
 		<label for="password">Password</label>
-		<input id="password" type="password" th:field="${registerDTO.password}"/>
-		<p th:errors="${registerDTO.password}"></p>
+		<input class="form-control" id="password" type="password" th:field="${registerFormDTO.password}"/>
+		<p th:errors="${registerFormDTO.password}"></p>
 		
-		<label for="verifyPassword">Password</label>
-		<input id="verifyPassword" type="password" th:field="${registerDTO.verifyPassword}"/>
-		<p th:errors="${registerDTO.password}"></p>
+		<label for="verifyPassword">Verify password</label>
+		<input class="form-control" id="verifyPassword" type="password" th:field="${registerFormDTO.verifyPassword}"/>
+		<p th:errors="${registerFormDTO.verifyPassword}"></p>
 		
 		<input type="submit" value="Submit"/>
 	</form>

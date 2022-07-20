@@ -56,14 +56,14 @@ public class AuthenticationController {
 	public String getLoginPage(Model model) {
 
 		model.addAttribute("title", "Login to the tech jobs portal");
-		model.addAttribute("loginDTO", new LoginFormDTO());
+		model.addAttribute(new LoginFormDTO());
 
 		return "/login";
 
 	}
 
 	@PostMapping("/login")
-	public String processLoginRequest(@Valid @ModelAttribute LoginFormDTO loginDTO, Errors errors, Model model, HttpServletRequest request) {
+	public String processLoginRequest(@Valid @ModelAttribute LoginFormDTO loginFormDTO, Errors errors, Model model, HttpServletRequest request) {
 
 		// if the passed in values are not valid, return them to the login form
 		if(errors.hasErrors()) {
@@ -72,7 +72,7 @@ public class AuthenticationController {
 		}
 
 		// if no errors, then get user from database
-		User user = userRepository.findByUsername(loginDTO.getUsername());
+		User user = userRepository.findByUsername(loginFormDTO.getUsername());
 
 		// user could still be null, somehow
 		if(user == null) {
@@ -82,7 +82,7 @@ public class AuthenticationController {
 		}
 
 		// or password might not match the one stored in the database
-		if(!user.isMatchingPassword(loginDTO.getPassword())) {
+		if(!user.isMatchingPassword(loginFormDTO.getPassword())) {
 			errors.rejectValue("password", "password.isnotcorrect", "Sorry, that password is not correct");
 			model.addAttribute("title", "Login");
 			return "login";
@@ -100,13 +100,13 @@ public class AuthenticationController {
 	public String getRegistrationForm(Model model) {
 
 		model.addAttribute("title", "Register");
-		model.addAttribute("registerDTO", new RegisterFormDTO());
+		model.addAttribute(new RegisterFormDTO());
 
 		return "register";
 	}
 
 	@PostMapping("/register")
-	public String processRegisterRequest(@Valid @ModelAttribute RegisterFormDTO registerDTO, Errors errors, Model model, HttpServletRequest request) {
+	public String processRegisterRequest(@Valid @ModelAttribute RegisterFormDTO registerFormDTO, Errors errors, Model model, HttpServletRequest request) {
 
 		// errors on the form fields
 		if(errors.hasErrors()) {
@@ -115,26 +115,26 @@ public class AuthenticationController {
 		}
 
 		// password and verify don't match
-		if(!registerDTO.getPassword().equals(registerDTO.getVerifyPassword())) {
+		if(!registerFormDTO.getPassword().equals(registerFormDTO.getVerifyPassword())) {
 			errors.rejectValue("password", "password.doesnotmatch", "Password does not match");
 			model.addAttribute("title", "Register");
 			return "register";
 		}
 
-		User user = userRepository.findByUsername(registerDTO.getUsername());
+		User user = userRepository.findByUsername(registerFormDTO.getUsername());
 
 		// user already exists
 		if(user != null) {
-			errors.rejectValue("user", "user.alreadyexists", "User is already in the system");
+			errors.rejectValue("username", "user.alreadyexists", "User is already in the system");
 			model.addAttribute("title", "Login");
-			return "login";
+			return "redirect:/login";
 		}
 
 		// no errors, passwords match and user doesn't already exist
 		// create new user based on DTO values
 		// save user to db
 		// set user session info
-		User newUser = new User(registerDTO.getUsername(), registerDTO.getPassword());
+		User newUser = new User(registerFormDTO.getUsername(), registerFormDTO.getPassword());
 
 		userRepository.save(newUser);
 		setUserInSession(request.getSession(), newUser);

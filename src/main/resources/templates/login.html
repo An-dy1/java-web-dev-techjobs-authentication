@@ -11,12 +11,12 @@
 		<div class="form-group"></div>
 		
 		<label for="username">Username</label>
-		<input id="username" type="text" th:field="${loginDTO.username}"/>
-		<p th:errors="${loginDTO.username}"></p>
+		<input id="username" type="text" th:field="${loginFormDTO.username}"/>
+		<p th:errors="${loginFormDTO.username}"></p>
 		
 		<label for="password">Password</label>
-		<input id="password" type="password" th:field="${loginDTO.password}"/>
-		<p th:errors="${loginDTO.password}"></p>
+		<input id="password" type="password" th:field="${loginFormDTO.password}"/>
+		<p th:errors="${loginFormDTO.password}"></p>
 		
 		<input type="submit" value="Submit"/>
 	</form>

@@ -11,13 +11,9 @@ import javax.validation.constraints.Size;
 public class User extends AbstractEntity {
 
 	@NotNull
-	@NotBlank
-	@Size(min = 3, max = 20, message="username must be between 3 and 20 characters")
 	private String username;
 
 	@NotNull
-	@NotBlank
-	@Size(min = 5, max = 35, message="password must be between 5 and 35 characters")
 	private String passwordHash;
 
 	private static final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
