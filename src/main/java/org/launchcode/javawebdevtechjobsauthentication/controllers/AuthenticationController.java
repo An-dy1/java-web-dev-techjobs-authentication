@@ -2,6 +2,7 @@ package org.launchcode.javawebdevtechjobsauthentication.controllers;
 
 import org.launchcode.javawebdevtechjobsauthentication.models.User;
 import org.launchcode.javawebdevtechjobsauthentication.models.data.LoginFormDTO;
+import org.launchcode.javawebdevtechjobsauthentication.models.data.RegisterFormDTO;
 import org.launchcode.javawebdevtechjobsauthentication.models.data.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -97,6 +98,48 @@ public class AuthenticationController {
 
 	@GetMapping("/register")
 	public String getRegistrationForm(Model model) {
+
+		model.addAttribute("title", "Register");
+		model.addAttribute("registerDTO", new RegisterFormDTO());
+
+		return "register";
+	}
+
+	@PostMapping("/register")
+	public String processRegisterRequest(@Valid @ModelAttribute RegisterFormDTO registerDTO, Errors errors, Model model, HttpServletRequest request) {
+
+		// errors on the form fields
+		if(errors.hasErrors()) {
+			model.addAttribute("title", "Register");
+			return "register";
+		}
+
+		// password and verify don't match
+		if(!registerDTO.getPassword().equals(registerDTO.getVerifyPassword())) {
+			errors.rejectValue("password", "password.doesnotmatch", "Password does not match");
+			model.addAttribute("title", "Register");
+			return "register";
+		}
+
+		User user = userRepository.findByUsername(registerDTO.getUsername());
+
+		// user already exists
+		if(user != null) {
+			errors.rejectValue("user", "user.alreadyexists", "User is already in the system");
+			model.addAttribute("title", "Login");
+			return "login";
+		}
+
+		// no errors, passwords match and user doesn't already exist
+		// create new user based on DTO values
+		// save user to db
+		// set user session info
+		User newUser = new User(registerDTO.getUsername(), registerDTO.getPassword());
+
+		userRepository.save(newUser);
+		setUserInSession(request.getSession(), newUser);
+
+		return "redirect:";
 
 	}
 }
