@@ -33,6 +33,13 @@ public class AuthenticationController {
 
 	}
 
+	public boolean isActiveSession(HttpSession session) {
+		if(getUserFromSession(session) == null) {
+			return false;
+		}
+		return true;
+	}
+
 	// a method to retrieve user info from the session
 	public User getUserFromSession(HttpSession session) {
 
@@ -53,9 +60,10 @@ public class AuthenticationController {
 	}
 
 	@GetMapping("/login")
-	public String getLoginPage(Model model) {
+	public String getLoginPage(Model model, HttpServletRequest request) {
 
 		model.addAttribute("title", "Login to the tech jobs portal");
+		model.addAttribute("activeSession", isActiveSession(request.getSession()));
 		model.addAttribute(new LoginFormDTO());
 
 		return "/login";
@@ -97,9 +105,10 @@ public class AuthenticationController {
 	}
 
 	@GetMapping("/register")
-	public String getRegistrationForm(Model model) {
+	public String getRegistrationForm(Model model, HttpServletRequest request) {
 
 		model.addAttribute("title", "Register");
+		model.addAttribute("activeSession", isActiveSession(request.getSession()));
 		model.addAttribute(new RegisterFormDTO());
 
 		return "register";
@@ -146,6 +155,6 @@ public class AuthenticationController {
 	@GetMapping("/logout")
 	public String handleLogout(HttpServletRequest request) {
 		request.getSession().invalidate();
-		return "redirect:/login";
+		return "redirect:";
 	}
 }

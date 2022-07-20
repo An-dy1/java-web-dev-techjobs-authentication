@@ -8,6 +8,9 @@
 
 <div class="container body-content">
     <h2>TechJobs</h2>
+		<th:block th:if="${user}">
+			<p th:text="'Welcome ' + ${user.username}"></p>
+		</th:block>
     <ul>
         <li th:each="job : ${jobs}">
             <a th:href="@{'/view/' + ${job.id}}" th:text="${job.name}"></a>
